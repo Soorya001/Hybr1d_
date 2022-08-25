@@ -30,6 +30,9 @@ try {
 
 //AUTH API
 
+//registration API is called for first time users, and their data is stored in the Users collection
+//this collection is later used to verify login creds
+
 app.post('/api/auth/register', async (req, res) => {
     var uname = req.body.username;
     var passwd = req.body.password;
@@ -62,6 +65,9 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
+
+//this API is used to allow login of users, it checks with the users collection and authenticates
+
 app.post('/api/auth/login', async (req, res) => {
     var uname = req.body.username;
     var passwd = req.body.password;
@@ -74,7 +80,6 @@ app.post('/api/auth/login', async (req, res) => {
     else {
         res.send("wrong username/password");
     }
-    console.log(uname, passwd);
 });
 
 
@@ -100,6 +105,7 @@ app.get('/api/buyer/seller-catalog/:seller_id', async (req, res) => {
 
     const response = await CatalogModel.find({ "sellerid": sellerid });
 
+    //to check if catalog for a particular seller exists
     if (response.length > 0) {
         res.send({ "message": "found", "catalog": response });
     }
@@ -107,6 +113,7 @@ app.get('/api/buyer/seller-catalog/:seller_id', async (req, res) => {
         res.send({ "message": "not-found" });
     }
 });
+
 
 app.post('/api/buyer/create-order/:seller_id', async (req, res) => {
 
@@ -121,6 +128,8 @@ app.post('/api/buyer/create-order/:seller_id', async (req, res) => {
     var orderRequests = req.body.products;
 
     var flag = 1;
+
+    //In case where requested/placed order contains products not present in catalog, order wont be placed
     for (var i = 0; i < orderRequests.length; i++) {
         console.log(orderRequests);
         var tempReq = orderRequests[i];
@@ -146,8 +155,9 @@ app.post('/api/buyer/create-order/:seller_id', async (req, res) => {
         await newOrder.save();
         res.send({ 'message': "ok, order placed" });
     }
+
     else {
-        res.send({ 'message': 'not-okay' });
+        res.send({ 'message': 'Error, order contains unavailable products' });
     }
 });
 
@@ -164,6 +174,7 @@ app.post('/api/seller/create-catalog', async (req, res) => {
     res.send(catalog);
 });
 
+
 app.get('/api/seller/orders', async (req, res) => {
 
     console.log('Retrieve the list of orders received by a seller');
@@ -178,8 +189,10 @@ app.get('/api/seller/orders', async (req, res) => {
         res.send({ "message": "no orders found" });
 });
 
-app.listen(5000, () => {
-    console.log("listening at port: 5000");
+
+
+app.listen(process.env.PORT, () => {
+    console.log("listening at port: " + process.env.PORT);
 });
 
 
