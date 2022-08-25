@@ -1,6 +1,7 @@
 var express = require('express');
 var cors = require('cors');
 var app = express();
+var dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
 const UserModel = require('./models/user').UserModel;
 const SellerModel = require('./models/seller').SellerModel;
@@ -12,7 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
 
-const mongoAtlasUri = "mongodb+srv://Soorya:Soorya99@hybr1d.odfabe3.mongodb.net/Hybr1d?retryWrites=true&w=majority"
+const mongoAtlasUri = process.env.MONGOLAB_URI;
 
 try {
     // Connecting to the MongoDB cluster
