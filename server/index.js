@@ -73,12 +73,14 @@ app.post('/api/auth/login', async (req, res) => {
     var passwd = req.body.password;
 
     const response = await UserModel.find({ "username": uname, "password": passwd });
-    console.log(response);
+
     if (response.length) {
         res.send("Login successful");
+        console.log("login successful");
     }
     else {
         res.send("wrong username/password");
+        console.log("wrong username/password");
     }
 });
 
