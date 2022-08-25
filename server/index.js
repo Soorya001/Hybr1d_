@@ -13,7 +13,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
 
-const mongoAtlasUri = process.env.MONGOLAB_URI;
+// const mongoAtlasUri = process.env.MONGOLAB_URI;
+const mongoAtlasUri = "mongodb+srv://Soorya:Soorya99@hybr1d.odfabe3.mongodb.net/Hybr1d?retryWrites=true&w=majority";
 
 try {
     // Connecting to the MongoDB cluster
@@ -174,6 +175,8 @@ app.post('/api/seller/create-catalog', async (req, res) => {
     await newCatalog.save();
 
     res.send(catalog);
+
+    console.log("catalog created");
 });
 
 
@@ -193,11 +196,13 @@ app.get('/api/seller/orders', async (req, res) => {
 
 
 
-app.listen(process.env.PORT, () => {
+// app.listen(process.env.PORT, () => {
+//     console.log("listening at port: " + process.env.PORT);
+// });
+
+app.listen(5000, () => {
     console.log("listening at port: " + process.env.PORT);
 });
-
-
 
 
 
